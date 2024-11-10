@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('node_id', false, true)->nullable(false)->comment('节点id');
             $table->integer('create_time', false, true)->comment('创建时间');
             $table->unique(['role_id', 'node_id'], 'uniq_role_node');
+            $table->comment('后台角色菜单节点关联表');
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_general_ci';
         });

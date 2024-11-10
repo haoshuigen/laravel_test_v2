@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Service\LoginService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 use Webman\Captcha\CaptchaBuilder;
@@ -22,11 +23,9 @@ class LoginController extends BaseController
     public function index(): Response|View|JsonResponse
     {
         if (isSign()) {
-            return view('admin.success', [
-                'url'   => url('admin/index'),
-                'wait'  => 3,
-                'code'  => 0,
-                'msg'   => 'you are logged in already'
+            return $this->general(0, [
+                'url' => url('admin/index/index'),
+                'msg' => 'you are logged in already'
             ]);
         }
 
@@ -39,24 +38,22 @@ class LoginController extends BaseController
         });
 
         $rules = [
-            'username'  => 'required|max:20',
-            'password'  => 'required',
-            'code'      => 'required|captcha',
+            'username' => 'required|max:20',
+            'password' => 'required',
+            'code' => 'required|captcha',
         ];
 
         $validator = Validator::make($post, $rules, [
             'username.required' => 'username must be not empty',
-            'username.max'      => 'username length no more than 20',
+            'username.max' => 'username length no more than 20',
             'password.required' => 'password must be not empty',
-            'code.required'     => 'captcha must be not empty',
-            'code.captcha'      => 'captcha not right',
+            'code.required' => 'captcha must be not empty',
+            'code.captcha' => 'captcha not right',
         ]);
 
         if ($validator->fails()) {
-            return json([
-                'code'  => 1,
-                'msg'   => $validator->errors()->first(),
-                'token' => csrf_token()
+            return $this->general(1, [
+                'msg' => $validator->errors()->first()
             ]);
         }
 
@@ -65,16 +62,13 @@ class LoginController extends BaseController
         $loginError = $loginServiceObj->getError();
 
         if (empty($loginError)) {
-            return json([
-                'code'  => 0,
-                'msg'   => 'login succeeded, welcome back!',
-                'data'  => $loginServiceObj->getAdminData()
+            return $this->general(0, [
+                'msg' => 'login succeeded, welcome back!',
+                'data' => $loginServiceObj->getAdminData()
             ]);
         } else {
-            return json([
-                'code'  => 1,
-                'msg'   => $loginError,
-                'token' => csrf_token()
+            return $this->general(1, [
+                'msg' => $loginError,
             ]);
         }
     }
@@ -97,8 +91,14 @@ class LoginController extends BaseController
      */
     public function logout(): Response|JsonResponse|View
     {
-        request()->session()->forget('admin');
+        if (isSign()) {
+            request()->session()->forget('admin');
+            Cache::forget('navbarMenus_' . session('admin.id'));
+        }
 
-        return $this->success('logout done!', [], url('/login'));
+        return $this->general(0, [
+            'msg' => 'logout done!',
+            'url' => url('login')
+        ]);
     }
 }

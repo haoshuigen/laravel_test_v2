@@ -20,6 +20,7 @@ return new class extends Migration
             $table->tinyInteger('disabled', false, true)->default(0)->comment('是否被禁用0:正常,1:被禁用')->nullable(false);
             $table->integer('last_login_time', false, true)->comment('上次登录时间')->default(null)->nullable();
             $table->integer('create_time', false, true)->comment('创建时间')->default(null);
+            $table->comment('后台用户表');
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_general_ci';
         });

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->integer('id', true, true);
             $table->string('role_name',30)->nullable(false)->comment('用户角色');
             $table->integer('create_time', false, true)->comment('创建时间');
+            $table->comment('后台用户角色表');
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_general_ci';
         });

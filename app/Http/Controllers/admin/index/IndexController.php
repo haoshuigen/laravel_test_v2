@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin\index;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\admin\BaseController;
+use App\Service\MenuService;
 use Illuminate\View\View;
 
 /**

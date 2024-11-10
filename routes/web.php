@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\LoginController;
 use App\Http\Controllers\admin\index\IndexController;
+use App\Http\Middleware\UserAuth;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,10 +16,13 @@ use App\Http\Controllers\admin\index\IndexController;
 |
 */
 // route for login
-Route::match(['get', 'post'], '/login',[LoginController::class, 'index']);
+Route::match(['get', 'post'], '/login', [LoginController::class, 'index']);
 // route for logout
-Route::match(['get', 'post'], '/logout',[LoginController::class, 'logout']);
+Route::match(['get', 'post'], '/logout', [LoginController::class, 'logout']);
 // route for getting captcha
-Route::get('captcha',[LoginController::class, 'captcha'])->name('captcha');
-// route for admin index page
-Route::get('admin/index', [IndexController::class, 'index']);
+Route::get('captcha', [LoginController::class, 'captcha'])->name('captcha');
+
+// route for all admin pages
+Route::middleware([UserAuth::class])->prefix('admin')->group(function () {
+    Route::get('/index/index', [IndexController::class, 'index']);
+});

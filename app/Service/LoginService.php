@@ -3,11 +3,12 @@
 namespace App\Service;
 
 use App\Models\AdminUser;
+use App\Models\AdminRole;
 
 /**
  * login service
  * Class LoginService
- * @package app\service\services
+ * @package app\service\service
  */
 class LoginService {
     /**
@@ -48,7 +49,9 @@ class LoginService {
         $admin->last_login_time = time();
         $admin->save();
         $admin = $admin->toArray();
+        $roleNames = AdminRole::whereIn('id', explode(',', $admin['role_ids']))->pluck('role_name')->toArray();
         $admin['login_expire_time'] = $rememberLogin === 1 ? true : time() + (24 * 3600);
+        $admin['role_name'] = implode(',', $roleNames);
         $this->adminData = $admin;
         session(compact('admin'));
     }

@@ -25,10 +25,12 @@
                 </div>
             </div>
         </div>
-        <div class="checkbox">
-            <label>
-                <input type="checkbox" name="remember" value="1"> Remember me
-            </label>
+        <div class="form-group">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="remember" value="1">Keep logged in
+                </label>
+            </div>
         </div>
         <div class="row" style="text-align:center;">
             {{csrf_field()}}
@@ -43,13 +45,13 @@
             $.ajax({
                 "type": "post",
                 "dataType": "json",
-                "url":"{{url('/login')}}",
+                "url": "{{url('/login')}}",
                 "data": $("form[name='loginForm']").serialize(),
                 "success": function (res) {
                     common.close(loading_index);
                     if (res.code === 0) {
                         common.success('login succeeded!', function () {
-                            location.href = '{{url('admin/index')}}'
+                            location.href = '{{url('admin/index/index')}}'
                         })
                     } else {
                         // 重新赋值
