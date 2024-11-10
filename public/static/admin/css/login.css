@@ -1,0 +1,16 @@
+.login-box {
+    width: 480px;
+    padding: 5px 20px 20px 20px;
+    min-height: 200px;
+    border: 1px solid #dddddd;
+    margin: 100px auto 0 auto;
+}
+
+.login-box h2 {
+    text-align: center;
+}
+
+.captcha-code {
+    width: 133px;
+    height: 35px;
+}
