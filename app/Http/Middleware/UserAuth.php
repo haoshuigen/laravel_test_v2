@@ -19,8 +19,6 @@ class UserAuth
      */
     public function handle(HttpRequest $request, Closure $next): HttpResponse
     {
-        $parameters = request()->route()->parameters;
-        $controller = $parameters['controller'] ?? 'index';
         $adminUserInfo = session('admin');
         if (empty($adminUserInfo)) {
             return $this->general(1, [

@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,7 +12,7 @@ return new class extends Migration
     {
         Schema::create('admin_role', function (Blueprint $table) {
             $table->integer('id', true, true);
-            $table->string('role_name',30)->nullable(false)->comment('用户角色');
+            $table->string('role_name', 30)->nullable(false)->comment('用户角色');
             $table->integer('create_time', false, true)->comment('创建时间');
             $table->comment('后台用户角色表');
             $table->charset = 'utf8mb4';

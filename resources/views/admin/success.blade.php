@@ -94,13 +94,6 @@
             color: #3498db
         }
 
-        .copyright p {
-            width: 100%;
-            color: #919191;
-            text-align: center;
-            font-size: 10px
-        }
-
         .system-message .btn-grey {
             border-color: #bbb;
             color: #bbb

@@ -1,9 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\admin\DevController;
+use App\Http\Controllers\admin\IndexController;
 use App\Http\Controllers\admin\LoginController;
-use App\Http\Controllers\admin\index\IndexController;
 use App\Http\Middleware\UserAuth;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,4 +26,5 @@ Route::get('captcha', [LoginController::class, 'captcha'])->name('captcha');
 // route for all admin pages
 Route::middleware([UserAuth::class])->prefix('admin')->group(function () {
     Route::get('/index/index', [IndexController::class, 'index']);
+    Route::get('/dev/index', [DevController::class, 'index']);
 });

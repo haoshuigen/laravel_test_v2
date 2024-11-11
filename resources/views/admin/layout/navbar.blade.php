@@ -26,7 +26,7 @@
                                aria-expanded="false">{{$menu['title']}} <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 @foreach($menu['child'] as $childMenu)
-                                    <li>
+                                    <li @if(!empty($childMenu['url']) && $childMenu['url'] == $routePath) class="active" @endif>
                                         <a href="@if(!empty($childMenu['url'])){{url($childMenu['url'])}}@else javascript:vod(0);@endif">{{$childMenu['title']}}</a>
                                     </li>
                                 @endforeach
@@ -39,7 +39,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">{{session('admin.username')}}<span class="caret"></span></a>
+                       aria-expanded="false">{{session('admin.username')}}【{{session('admin.role_name')}}】<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="{{url('/logout')}}" title="To logout the Admin dashboard">Logout</a></li>
                     </ul>
