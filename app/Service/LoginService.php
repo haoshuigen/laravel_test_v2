@@ -10,7 +10,8 @@ use App\Models\AdminRole;
  * Class LoginService
  * @package app\service\service
  */
-class LoginService {
+class LoginService
+{
     /**
      * @var string login error message
      */
@@ -30,10 +31,10 @@ class LoginService {
      * @desc login function
      * @param string $username
      * @param string $password
-     * @param int   $rememberLogin
+     * @param int $rememberLogin
      * @return void
      */
-    public function doLogin(string $username, string $password, int $rememberLogin):void
+    public function doLogin(string $username, string $password, int $rememberLogin): void
     {
         $admin = AdminUser::where(['username' => $username])->first();
 
@@ -60,7 +61,7 @@ class LoginService {
      * @desc return login error
      * @return string
      */
-    public function getError():string
+    public function getError(): string
     {
         return $this->error;
     }
@@ -69,7 +70,7 @@ class LoginService {
      * @desc return user's data
      * @return array
      */
-    public function getAdminData():array
+    public function getAdminData(): array
     {
         return $this->adminData;
     }

@@ -16,7 +16,6 @@ use Exception;
 class Handler extends ExceptionHandler
 {
     use ResponseTrait;
-
     /**
      * A list of exception types with their corresponding custom log levels.
      *
@@ -62,7 +61,7 @@ class Handler extends ExceptionHandler
      * @return JsonResponse|HttpResponse|View
      * @throws Throwable
      */
-    public function render($request, Throwable $e): JsonResponse|HttpResponse|View
+    public function render($request, Throwable $e):JsonResponse|HttpResponse|View
     {
         if ($e instanceof QueryException) {
             try {

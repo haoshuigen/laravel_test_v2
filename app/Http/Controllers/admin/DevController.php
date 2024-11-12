@@ -10,6 +10,7 @@ use App\Service\DataService;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Exception;
+
 /**
  * @desc Admin Dev Controller
  */
@@ -78,11 +79,11 @@ class DevController extends BaseController
         }
 
         return json([
-            'code'  => $code,
-            'msg'   => $msg,
+            'code' => $code,
+            'msg' => $msg,
             'token' => csrf_token(),
-            'data'  => $list,
-            'cols'  => $columnArr,
+            'data' => $list,
+            'cols' => $columnArr,
             'total' => $total,
         ]);
     }
@@ -121,10 +122,10 @@ class DevController extends BaseController
         }
 
         $returnData = [
-            'code'  => $code,
-            'msg'   => $msg,
+            'code' => $code,
+            'msg' => $msg,
             'token' => csrf_token(),
-            'data'  => $downloadPath,
+            'data' => $downloadPath,
         ];
 
         return json($returnData);
@@ -151,10 +152,10 @@ class DevController extends BaseController
         }
 
         $returnData = [
-            'code'  => $code,
-            'msg'   => $msg,
+            'code' => $code,
+            'msg' => $msg,
             'token' => csrf_token(),
-            'data'  => $downloadPath,
+            'data' => $downloadPath,
         ];
 
         return json($returnData);
