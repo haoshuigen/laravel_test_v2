@@ -18,4 +18,5 @@ input[type="button"] {
 .tableBox {
     margin-top: 20px;
     border-top: 0;
+    display: none;
 }

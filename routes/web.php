@@ -26,5 +26,5 @@ Route::get('captcha', [LoginController::class, 'captcha'])->name('captcha');
 // route for all admin pages
 Route::middleware([UserAuth::class])->prefix('admin')->group(function () {
     Route::get('/index/index', [IndexController::class, 'index']);
-    Route::get('/dev/index', [DevController::class, 'index']);
+    Route::match(['get', 'post'], '/dev/index', [DevController::class, 'index']);
 });
