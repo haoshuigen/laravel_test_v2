@@ -131,7 +131,7 @@
                     }).appendTo('body');
                     $a[0].click();
                 } else {
-                    common.error(res.msg);
+                    common.error(res.msg === undefined ? "System Error" : res.msg);
                 }
             },
             error: function (xhr) {

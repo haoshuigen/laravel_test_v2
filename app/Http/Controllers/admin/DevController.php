@@ -9,7 +9,6 @@ use App\Service\DataService;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Exception;
-
 /**
  * @desc Admin Dev Controller
  */
@@ -82,30 +81,35 @@ class DevController extends BaseController
     private function jsonExportResponse(string $sql): JsonResponse
     {
         $downloadPath = '';
-        $dbData = DataService::dbCursor($sql);
-        $dataArr = [];
 
-        foreach ($dbData as $row) {
-            $dataArr[] = (array)$row;
-        }
+        try {
+            $dbData = DataService::dbCursor($sql);
+            $dataArr = [];
 
-        if ($dataArr) {
-            $fileName = date('YmdHis') . uniqid() . '.json';
-            $code = 0;
-            $msg = "ok";
-            Storage::disk('public')->put($fileName, json_encode($dataArr, JSON_UNESCAPED_UNICODE));
-            $downloadPath = 'export/' . $fileName;
-        } else {
+            foreach ($dbData as $row) {
+                $dataArr[] = (array)$row;
+            }
+
+            if ($dataArr) {
+                $fileName = date('YmdHis') . uniqid() . '.json';
+                $code = 0;
+                $msg = "ok";
+                Storage::disk('public')->put($fileName, json_encode($dataArr, JSON_UNESCAPED_UNICODE));
+                $downloadPath = 'export/' . $fileName;
+            } else {
+                $code = 1;
+                $msg = "empty data";
+            }
+        } catch (Exception $e) {
             $code = 1;
-            $msg = "empty data";
+            $msg = $e->getMessage();
         }
-
 
         $returnData = [
-            'code' => $code,
-            'msg' => $msg,
+            'code'  => $code,
+            'msg'   => $msg,
             'token' => csrf_token(),
-            'data' => $downloadPath,
+            'data'  => $downloadPath,
         ];
 
         return json($returnData);
@@ -118,18 +122,24 @@ class DevController extends BaseController
      */
     private function excelExportResponse(string $sql): JsonResponse
     {
-        $dataExportObj = new SqlDataExport($sql);
-        $fileName = date('YmdHis') . uniqid() . '.xlsx';
-        Excel::store($dataExportObj, $fileName, 'public');
-        $downloadPath = 'export/' . $fileName;
-        $code = 0;
-        $msg = "ok";
+        try {
+            $downloadPath = '';
+            $dataExportObj = new SqlDataExport($sql);
+            $fileName = date('YmdHis') . uniqid() . '.xlsx';
+            Excel::store($dataExportObj, $fileName, 'public');
+            $downloadPath = 'export/' . $fileName;
+            $code = 0;
+            $msg = "ok";
+        } catch (Exception $e) {
+            $code = 1;
+            $msg = $e->getMessage();
+        }
 
         $returnData = [
-            'code' => $code,
-            'msg' => $msg,
+            'code'  => $code,
+            'msg'   => $msg,
             'token' => csrf_token(),
-            'data' => $downloadPath,
+            'data'  => $downloadPath,
         ];
 
         return json($returnData);
