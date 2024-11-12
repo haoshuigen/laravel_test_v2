@@ -91,7 +91,7 @@
     }
 
     /**
-     * validate input sql
+     * validate input sql,only select type is allowed
      * @returns {boolean}
      */
     function validateSql() {
