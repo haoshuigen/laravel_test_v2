@@ -104,6 +104,43 @@
         }
     }
 
+    function ajaxExportSubmit(dataType) {
+        let loadIndex = common.loading('loading...');
+        let submitData = {
+            "sql": $("textarea[name='sql']").val(),
+            "data_type": dataType,
+            "_token": $("input[name='_token']").val()
+        };
+        $.ajax({
+            url: '{{url('admin/dev/index')}}',
+            type: 'post',
+            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+            dataType: "json",
+            data: submitData,
+            timeout: 60000,
+            success: function (res) {
+                common.close(loadIndex);
+                if (res.token !== undefined) {
+                    $("input[name='_token']").val(res.token);
+                }
+
+                if (res.code === 0 && res.data) {
+                    let $a = $('<a>', {
+                        href: "{{url('/export/download')}}/" + res.data,
+                        style: 'display: none;'
+                    }).appendTo('body');
+                    $a[0].click();
+                } else {
+                    common.error(res.msg);
+                }
+            },
+            error: function (xhr) {
+                common.error('Status:' + xhr.status + '，' + xhr.statusText + '，请稍后再试！');
+                return false;
+            }
+        });
+    }
+
     let is_init = 0;
     let columnArr = [];
     $(function () {
@@ -112,7 +149,7 @@
 
             if (validateSql()) {
                 if (dataType === 'json' || dataType === 'excel') {
-
+                    ajaxExportSubmit(dataType);
                 } else {
                     is_init = 0;
                     renderTable();

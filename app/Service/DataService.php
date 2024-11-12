@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-use Exception;
 use Generator;
 use Illuminate\Support\Facades\DB;
 
@@ -17,7 +16,7 @@ class DataService
      */
     public static function getData(string $sql, int $offset, int $pageSize): array
     {
-        $totalSql = sprintf("SELECT COUNT(*) AS total FROM (%s) as t", $sql);
+        $totalSql = sprintf("SELECT COUNT(*) AS `total` FROM (%s) as t", $sql);
         $totalRes = DB::select($totalSql);
         $totalCount = $totalRes[0]->total;
 
@@ -33,6 +32,7 @@ class DataService
     }
 
     /**
+     * return sql execution result with a Generator
      * @param string $sql
      * @return Generator
      */

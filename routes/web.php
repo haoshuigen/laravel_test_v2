@@ -5,7 +5,7 @@ use App\Http\Controllers\admin\IndexController;
 use App\Http\Controllers\admin\LoginController;
 use App\Http\Middleware\UserAuth;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\DownExportFileController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\Route;
 Route::match(['get', 'post'], '/login', [LoginController::class, 'index']);
 // route for logout
 Route::match(['get', 'post'], '/logout', [LoginController::class, 'logout']);
+// route for download exporting file
+Route::get('/export/download/{path}', [DownExportFileController::class, 'index'])->where('path', '.*');
 // route for getting captcha
 Route::get('captcha', [LoginController::class, 'captcha'])->name('captcha');
 
