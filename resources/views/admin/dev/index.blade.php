@@ -21,6 +21,9 @@
 </div>
 <script src="/static/admin/js/bootstrap-table.min.js" charset="utf-8"></script>
 <script>
+    /**
+     * get sql data from server and display it in table with pagination
+     */
     function renderTable() {
         $("#tableBox").hide();
         let loadingIndex = common.loading('loading');
@@ -48,13 +51,6 @@
                     data_type: 'raw'
                 };
             },
-            onLoadSuccess: function (res) {
-                console.log(res);
-            },
-            /*            columns: [{"field": "id", "title": "id"}, {"field": "migration", "title": "migration"}, {
-                            "field": "batch",
-                            "title": "batch"
-                        }],*/
             responseHandler: function (res) {
                 common.close(loadingIndex);
 
@@ -94,6 +90,10 @@
         });
     }
 
+    /**
+     * validate input sql
+     * @returns {boolean}
+     */
     function validateSql() {
         const regex = /^\s*SELECT\s+.*$/i;
         if (!regex.test($("textarea[name='sql']").val())) {
@@ -104,6 +104,10 @@
         }
     }
 
+    /**
+     * submit server to export json/excel file
+     * @param dataType
+     */
     function ajaxExportSubmit(dataType) {
         let loadIndex = common.loading('loading...');
         let submitData = {
@@ -141,6 +145,7 @@
         });
     }
 
+    // initialize part
     let is_init = 0;
     let columnArr = [];
     $(function () {

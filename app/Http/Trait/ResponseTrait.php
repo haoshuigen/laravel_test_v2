@@ -12,9 +12,10 @@ trait ResponseTrait
      * @desc general response method
      * @param int $code
      * @param array $data
+     * @param int $statusCode
      * @return Response|View|JsonResponse
      */
-    public function general(int $code = 0, array $data = []): Response|View|JsonResponse
+    public function general(int $code = 0, array $data = [], int $statusCode = 200): Response|View|JsonResponse
     {
         if (!isset($data['url'])) {
             $url = request()->ajax() ? '' : 'javascript:history.back(-1);';
@@ -23,20 +24,20 @@ trait ResponseTrait
         }
 
         $result = [
-            'code'  => $code,
-            'msg'   => $data['msg'] ?? '',
-            'data'  => $data ?: [],
-            'url'   => $url,
-            'wait'  => $data['wait'] ?? 3,
+            'code' => $code,
+            'msg' => $data['msg'] ?? '',
+            'data' => $data ?: [],
+            'url' => $url,
+            'wait' => $data['wait'] ?? 3,
             'token' => csrf_token(),
         ];
 
         if ($this->responseType() == "html") {
             $template = $code == 0 ? 'admin.success' : 'admin.error';
-            return response()->view($template, $result);
+            return response()->view($template, $result, $statusCode);
         }
 
-        return response()->json($result);
+        return response()->json($result, $statusCode);
     }
 
     /**

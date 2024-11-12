@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Exports\SqlDataExport;
+use App\Service\SqlLogService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 use App\Service\DataService;
@@ -51,25 +52,38 @@ class DevController extends BaseController
      */
     private function rawDataResponse(string $sql, int $offset = 0, int $pageSize = 10): JsonResponse
     {
-        $dbData = DataService::getData($sql, $offset, $pageSize);
-        $dbData = $dbData ? json_decode(json_encode($dbData), true) : [];
-        $cols = !empty($dbData['list']) && isset($dbData['list'][0]) ?
-            array_keys($dbData['list'][0]) : [];
+        try {
+            $dbData = DataService::getData($sql, $offset, $pageSize);
+            $dbData = $dbData ? json_decode(json_encode($dbData), true) : [];
+            $cols = !empty($dbData['list']) && isset($dbData['list'][0]) ?
+                array_keys($dbData['list'][0]) : [];
 
-        $columnArr = [];
-        if (!empty($cols)) {
-            foreach ($cols as $col) {
-                $columnArr[] = ['field' => $col, 'title' => $col];
+            $list = $dbData['list'];
+            $total = $dbData['total'];
+
+            $columnArr = [];
+            if (!empty($cols)) {
+                foreach ($cols as $col) {
+                    $columnArr[] = ['field' => $col, 'title' => $col];
+                }
             }
+            $code = 0;
+            $msg = 'ok';
+        } catch (Exception $exception) {
+            $msg = $exception->getMessage();
+            $code = 1;
+            $columnArr = [];
+            $list = [];
+            $total = 0;
         }
 
         return json([
-            'code' => 0,
-            'msg' => 'ok',
+            'code'  => $code,
+            'msg'   => $msg,
             'token' => csrf_token(),
-            'data' => $dbData['list'],
-            'cols' => $columnArr,
-            'total' => $dbData['total'],
+            'data'  => $list,
+            'cols'  => $columnArr,
+            'total' => $total,
         ]);
     }
 
@@ -103,6 +117,7 @@ class DevController extends BaseController
         } catch (Exception $e) {
             $code = 1;
             $msg = $e->getMessage();
+            SqlLogService::record($e, $sql);
         }
 
         $returnData = [

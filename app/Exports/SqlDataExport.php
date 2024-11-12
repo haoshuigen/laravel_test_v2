@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Service\SqlLogService;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use App\Service\DataService;
@@ -25,6 +26,7 @@ class SqlDataExport implements FromCollection
         try {
             $dbData = DataService::dbCursor($this->dbSql);
         } catch (Exception $exception) {
+            SqlLogService::record($exception, $this->dbSql);
             throw new Exception($exception->getMessage());
         }
 
